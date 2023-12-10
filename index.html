@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>McDonald's Virtual Ordering</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .menu label {
+            margin: 0 10px;
+            font-size: 16px;
+            display: block;
+        }
+
+        header {
+            background-color: #f00;
+            padding: 10px;
+            text-align: center;
+            color: #fff;
+        }
+
+        nav {
+            background-color: #333;
+            padding: 10px;
+            text-align: center;
+            color: #fff;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            margin: 0 10px;
+            font-size: 18px;
+        }
+
+        #orderInfo {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 18px;
+            color: #333;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #foodImage {
+            display: none;
+            max-width: 100%;
+            height: auto;
+            margin: 20px auto;
+            border: 2px solid #333;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>McDonald's Virtual Ordering</h1>
+</header>
+
+<nav>
+    <a href="#">Home</a>
+    <a href="#">Menu</a>
+    <a href="#">Promotions</a>
+    <a href="#">Contact</a>
+</nav>
+
+<div class="menu">
+    <label>
+        <input type="checkbox" value="Burger"> Burger
+    </label>
+    <label>
+        <input type="checkbox" value="Pizza"> Pizza
+    </label>
+    <label>
+        <input type="checkbox" value="Fries"> Fries
+    </label>
+    <label>
+        <input type="checkbox" value="Soda"> Soda
+    </label>
+    <label>
+        <input type="checkbox" value="Ice Cream"> Ice Cream
+    </label>
+</div>
+
+<button onclick="orderFood()">Order Food</button>
+<div id="orderInfo"></div>
+<img id="foodImage" src="" alt="Food Image">
+
+<script>
+    function orderFood() {
+        const selectedItems = getSelectedItems();
+
+        if (selectedItems.length === 0) {
+            alert('Please select at least one item before placing an order.');
+            return;
+        }
+
+        const orderPromise = new Promise((resolve) => {
+            const randomSeconds = Math.floor(Math.random() * 5000) + 1000;
+            setTimeout(() => {
+                resolve(selectedItems);
+            }, randomSeconds);
+        });
+
+        orderPromise.then((foods) => {
+            displayOrder(foods);
+        });
+    }
+
+    function getSelectedItems() {
+        const checkboxes = document.querySelectorAll('.menu input[type="checkbox"]');
+        const selectedItems = [];
+
+        checkboxes.forEach((checkbox) => {
+            if (checkbox.checked) {
+                selectedItems.push(checkbox.value);
+            }
+        });
+
+        return selectedItems;
+    }
+
+    function displayOrder(foods) {
+        const randomImageIndex = Math.floor(Math.random() * foods.length);
+        const randomFood = foods[randomImageIndex];
+        const imagePath = `images/${randomFood.toLowerCase()}.jpg`;
+
+        document.getElementById('foodImage').src = imagePath;
+        document.getElementById('foodImage').style.display = 'block';
+        document.getElementById('orderInfo').innerText = `Order ID: ${generateOrderID()} - ${foods.join(', ')}`;
+    }
+
+    function generateOrderID() {
+        return Math.floor(Math.random() * 1000) + 1;
+    }
+</script>
+
+</body>
+</html>
